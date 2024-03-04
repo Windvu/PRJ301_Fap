@@ -68,6 +68,17 @@ public class LoginController extends HttpServlet {
             }
             if (account != null) {
                 HttpSession session = request.getSession();
+
+                //implement remember me!
+                Cookie c_username = new Cookie("username", username);
+                c_username.setMaxAge(3600 * 24 * 7);
+
+                Cookie c_password = new Cookie("password", password);
+                c_password.setMaxAge(3600 * 24 * 7);
+
+                response.addCookie(c_username);
+                response.addCookie(c_password);
+
                 session.setAttribute("account", account);
                 // Redirect hoặc thông báo đăng nhập thành công
                 response.sendRedirect("lecturer/timetable");
@@ -90,6 +101,16 @@ public class LoginController extends HttpServlet {
             }
             if (accountStudent != null) {
                 HttpSession session = request.getSession();
+
+                //implement remember me!
+                Cookie c_username = new Cookie("username", username);
+                c_username.setMaxAge(3600 * 24 * 7);
+
+                Cookie c_password = new Cookie("password", password);
+                c_password.setMaxAge(3600 * 24 * 7);
+
+                response.addCookie(c_username);
+                response.addCookie(c_password);
                 session.setAttribute("account", accountStudent);
                 // Redirect hoặc thông báo đăng nhập thành công
                 response.getWriter().println("login successful!");
@@ -102,7 +123,6 @@ public class LoginController extends HttpServlet {
         }
 
 // Nếu account hoặc accountStudent được tìm thấy, đăng nhập thành công
-      
     }
 
     /**
