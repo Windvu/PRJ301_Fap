@@ -45,15 +45,24 @@ public class LessonDBContext extends DBContext<Lesson> {
     public ArrayList<Lesson> retakeAttendent() {
         ArrayList<Lesson> lessons = new ArrayList<>();
         try {
-            String sql = "SELECT leId,idAttend  FROM Lesson";
+             String sql = "SELECT leId,idAttend,  gName, l.lId, l.lName  FROM Lesson les\n"
+                    + "join [Group] g on g.gId= les.gId\n"
+                    + "join Lecturer l on l.lId=les.lId";
             PreparedStatement stm = connection.prepareStatement(sql);
             ResultSet rs = stm.executeQuery();
             while (rs.next()) {
                 Lesson les = new Lesson();
+                Group gr = new Group();
+                Lecturer le = new Lecturer();
                 les.setLeID(rs.getString("leId"));
                 les.setAttended(rs.getBoolean("idAttend"));
+                le.setlName(rs.getString("lName"));
+                gr.setgName(rs.getString("gName"));
+                les.setGroup(gr);
+                le.setlID(rs.getString("lId"));
+                les.setLecturer(le);
                 lessons.add(les);
-
+                
             }
         } catch (SQLException ex) {
             Logger.getLogger(LessonDBContext.class.getName()).log(Level.SEVERE, null, ex);

@@ -27,7 +27,6 @@ public class LecturerAttendentController extends BaseRequire {
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp, Account account) throws ServletException, IOException {
-
         String leid = req.getParameter("id");
         LessonDBContext lesDB = new LessonDBContext();
         ArrayList<Lesson> less = lesDB.retakeAttendent();
@@ -73,6 +72,8 @@ public class LecturerAttendentController extends BaseRequire {
         String leid = req.getParameter("id");
         LessonDBContext lesDB = new LessonDBContext();
         ArrayList<Attendence> atts = lesDB.getAttendencesByLesson(leid);
+        ArrayList<Lesson> less = lesDB.retakeAttendent();
+        req.setAttribute("lessons", less);
         req.setAttribute("atts", atts);
         req.getRequestDispatcher("../view/lecturer/attendence.jsp").forward(req, resp);
     }
