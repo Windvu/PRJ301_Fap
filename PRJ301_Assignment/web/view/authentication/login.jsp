@@ -100,10 +100,10 @@
 
                 </div>
 
-
+                        
                 <div class="col-md-6 login-form-2">
                     <div class="login-logo">
-                        <img src="https://rubicmarketing.com/wp-content/uploads/2022/07/y-nghia-logo-fpt-lan-3.jpg" alt="FPT Logo"/>
+                        <img src="images/logo_FPT.jpg" alt="FPT_logo"/>
                     </div>
                     <h3>Student</h3>
                     <form action="login" method="POST" >
