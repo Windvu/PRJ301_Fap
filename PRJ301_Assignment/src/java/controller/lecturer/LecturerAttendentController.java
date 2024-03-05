@@ -49,7 +49,7 @@ public class LecturerAttendentController extends BaseRequire {
 
         for (Lesson les : less) {
             if (les.getLeID().equals(leid)) {
-                lesson = les;
+                lesson.setAttended(les.isAttended());                    
             }
         }
         //First Attendence
@@ -60,10 +60,11 @@ public class LecturerAttendentController extends BaseRequire {
         //Re-attendent  
         if (lesson.isAttended() == true) {
             for (Attendence attSrceen : atts) {//Data from Screen                                                  
-                lesDB.UpdateAttendence(leid, attSrceen.getStudent().getsID(), attSrceen.isIsPresent());
+                lesDB.UpdateAttendence(leid, attSrceen.getStudent().getsID(), attSrceen.isIsPresent(),attSrceen.getaDescription());
             }
+            resp.sendRedirect("attendence?id=" + leid);
         }
-        resp.sendRedirect("attendence?id=" + leid);
+        
 
     }
 

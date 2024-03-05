@@ -27,14 +27,19 @@ import java.util.logging.Logger;
 public class LessonDBContext extends DBContext<Lesson> {
 //Retake attendence
 
-    public void UpdateAttendence(String leID, String sID, boolean isPresent) {
+    public void UpdateAttendence(String leID, String sID, boolean isPresent, String aDescript) {
         try {
-            String sql = " UPDATE Attendence SET isPresent=?, aDate=GETDATE() WHERE leId=? and sId=? and isPresent<>?";
+            // Kiểm tra xem mô tả mới có khác với mô tả hiện tại không
+            String sql = "UPDATE Attendence SET isPresent=?, aDescript=?, aDate=GETDATE() "
+                    + "WHERE leId=? AND sId=? AND (aDescript<>? OR (aDescript=? AND isPresent<>?))";
             PreparedStatement stm = connection.prepareStatement(sql);
-            stm.setString(2, leID);
-            stm.setString(3, sID);
             stm.setBoolean(1, isPresent);
-            stm.setBoolean(4, isPresent);
+            stm.setString(2, aDescript);
+            stm.setString(3, leID);
+            stm.setString(4, sID);
+            stm.setString(5, aDescript);
+            stm.setString(6, aDescript);
+            stm.setBoolean(7, isPresent);
             stm.executeUpdate();
         } catch (SQLException ex) {
             Logger.getLogger(LessonDBContext.class.getName()).log(Level.SEVERE, null, ex);
@@ -45,7 +50,7 @@ public class LessonDBContext extends DBContext<Lesson> {
     public ArrayList<Lesson> retakeAttendent() {
         ArrayList<Lesson> lessons = new ArrayList<>();
         try {
-             String sql = "SELECT leId,idAttend,  gName, l.lId, l.lName  FROM Lesson les\n"
+            String sql = "SELECT leId,idAttend,  gName, l.lId, l.lName  FROM Lesson les\n"
                     + "join [Group] g on g.gId= les.gId\n"
                     + "join Lecturer l on l.lId=les.lId";
             PreparedStatement stm = connection.prepareStatement(sql);
@@ -62,7 +67,7 @@ public class LessonDBContext extends DBContext<Lesson> {
                 le.setlID(rs.getString("lId"));
                 les.setLecturer(le);
                 lessons.add(les);
-                
+
             }
         } catch (SQLException ex) {
             Logger.getLogger(LessonDBContext.class.getName()).log(Level.SEVERE, null, ex);

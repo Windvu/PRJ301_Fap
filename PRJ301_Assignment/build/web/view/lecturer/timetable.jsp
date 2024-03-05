@@ -22,12 +22,57 @@
                 padding: 10px;
                 text-align: left;
             }
+            .container {
+                display: flex; /* Sử dụng flexbox để căn chỉnh */
+                justify-content: space-between; /* Căn đều các phần tử con */
+                align-items: center; /* Căn giữa theo chiều dọc */
+                padding: 10px; /* Thêm padding để tạo khoảng cách */
+            }
+            .title {
+                flex-grow: 1; /* Tiêu đề sẽ mở rộng để chiếm hết không gian còn lại */
+                text-align: center; /* Căn giữa theo chiều ngang */
+            }
         </style>
+        <script>
+            function logout(){
+                 window.location.href = "../logout";
+            }
+        </script>
     </head>
     <body>
+        <!-- ***title frame*** -->
+        <div class="container">
+            <img src="../images/FPT_Education_logo.svg.png" alt="Logo_FPT" style="width:250px; height: 100px;">
+            <h1 class="title">Lecturer's work schedule</h1>
+            <div style="width: 250px; display: flex; ">
+                <c:forEach items="${requestScope.lessons}" var="les" varStatus="loop">
+                    <!-- Kiểm tra xem là lần lặp đầu tiên -->
+                    <c:if test="${loop.first}">
+                        <div style="background-color: green; color: white; padding: 5px; margin-right: 10px; border-radius: 5px ">
+                            ${les.lecturer.lID} <!-- Hiển thị giá trị -->
+                        </div>
+                    </c:if>
+                </c:forEach>
+                <div style="border-left: 1px solid black; margin-right: 10px;"></div>
+                <input style="background-color: green; color: white; border-radius: 5px;padding: 5px;"  type="button" value="Log out" onclick="logout()">
+            </div>
+        </div>
+        <div style="margin-left: 30px">
+            <h3 style="">NOTE:</h3>
+            <p>
+                Các phòng bắt đầu bằng AL thuộc tòa nhà Alpha. VD: AL...<br>
+                Các phòng bắt đầu bằng BE thuộc tòa nhà Beta. VD: BE,..<br>
+                Các phòng bắt đầu bằng G thuộc tòa nhà Gamma. VD: G201,...<br>
+                Các phòng tập bằng đầu bằng R thuộc khu vực sân tập Vovinam.<br>
+                Các phòng bắt đầu bằng DE thuộc tòa nhà Delta. VD: DE,..<br>
+                Little UK (LUK) thuộc tầng 5 tòa nhà Delta<br>
+            </p>
+        </div>
 
         <table border="1px">
+            <!-- ***Line display the day***  -->
             <tr>
+                <!-- Choose the days -->
                 <td rowspan="2" style="background-color: darkorange">
                     <form action="timetable" method="GET">           
                         <input type="date" value="${requestScope.from}" name="from"/>  <br>
@@ -36,29 +81,37 @@
                     </form>
                 </td>
                 <c:forEach items="${requestScope.dates}" var="d">
+                    <!-- Weekdays -->
                     <td style="background-color: darkorange"  >
                         <div style="width: 100px ; color: white;  font-weight: bold">
                             ${d.dayName}
                         </div>
                     </td>
+                    <!--column dividing the weeks -->
                     <c:if test="${d.dayName eq 'SATURDAY'}">
                         <td style="background-color: darkorange"></td>
-
                     </c:if>
-                </c:forEach><br>
+
+            </c:forEach><br>
             </tr>
-            <tr>
+
+            <tr>              
                 <c:forEach items="${requestScope.dates}" var="d">
+                    <!-- the days in week -->
                     <td style="background-color: darkorange">
                         <div style="width: 100px; color: white;  font-weight: bold">
                             ${d.day}
                         </div>
                     </td>
+                    <!--column dividing the weeks -->
                     <c:if test="${d.dayName eq 'SATURDAY'}">
                         <td style="background-color: darkorange"></td>
                     </c:if>
                 </c:forEach><br>
             </tr>
+
+            <!-- ***Slots*** -->
+            <c:set var="currentTime" value="<%= new java.util.Date() %>" />
             <c:forEach items="${requestScope.slots}" var="slot">
                 <tr>
                     <td style="background-color: darkorange; font-weight: bold;color: white ">${slot.tName}</td>
@@ -73,10 +126,10 @@
                                     - ${les.group.subject.suID}<br>
                                     at ${les.room.rName}<br>
                                     <c:if test="${les.attended eq true}">
-                                        (Attendence)
+                                        (<b style="color: green">Attended</b>)
                                     </c:if>
-                                    <c:if test="${les.attended eq false}">
-                                        (Not yet)<br>
+                                    <c:if test="${(les.attended eq false) }">
+                                        (<b style="color: red">Not yet</b>)<br>
                                         ${les.slot.tDescript}
                                     </c:if>
 
@@ -89,14 +142,20 @@
                     </c:forEach>
                 </tr>  
             </c:forEach>
+            <!-- The rows of timetable -->    
             <tr style="background-color: darkorange;">
-                <td colspan="100%"></td> <!-- Số cột này phải lớn hơn hoặc bằng số cột trong bảng -->
+                <td colspan="100%"></td>
             </tr>
         </table>
+        <div style="margin-left: 30px; margin-bottom: 30px">
+            <h4>More note / Chú thích thêm:</h4>            
+            <p>
 
+                (<b style="color: green">attended</b>): You had attended this activity / Bạn đã tham gia hoạt động này<br>
+                (<b style="color: red">absent</b>): You had NOT attended this activity / Bạn đã vắng mặt buổi này<br>
 
-
-
+            </p>  
+        </div>
 
     </body>
 </html>

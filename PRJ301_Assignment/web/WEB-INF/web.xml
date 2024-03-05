@@ -16,6 +16,10 @@
         <servlet-name>LecturerAttendentController</servlet-name>
         <servlet-class>controller.lecturer.LecturerAttendentController</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>LogoutController</servlet-name>
+        <servlet-class>controller.authentication.LogoutController</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>BaseRequire</servlet-name>
         <url-pattern>/baserequire</url-pattern>
@@ -31,5 +35,9 @@
     <servlet-mapping>
         <servlet-name>LecturerAttendentController</servlet-name>
         <url-pattern>/lecturer/attendence</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>LogoutController</servlet-name>
+        <url-pattern>/logout</url-pattern>
     </servlet-mapping>
 </web-app>

@@ -52,7 +52,7 @@
                         <!-- NAME -->
                         <td>${a.student.sName}</td>
                         <!-- IMAGE -->   
-                        <td>
+                        <td>                            
                             <img src="../images/${a.student.sID}.jpg" width="140" height="160" alt="${a.student.sID}"/>
                         </td>
                         <!-- STATUS -->
@@ -71,7 +71,7 @@
                         <!--TAKER-->
                         <c:forEach items="${requestScope.lessons}" var="less">
                             <c:if test="${param.id eq less.leID}">
-
+                                
                                 <td>${less.lecturer.lID}</td> <!-- Hiển thị mã giáo viên -->
                             </c:if>
                         </c:forEach>
