@@ -4,62 +4,70 @@
  */
 package dal;
 
-import entity.Account;
+import entity.Role;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
-import java.sql.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
  *
- * @author sonnt
+ * @author Vu Minh Quan
  */
-public class AccountDBContext extends DBContext<Account> {
+public class RoleDBContext extends DBContext<Role> {
 
-    public Account getAccountByUsernamePassword(String username, String password) {
+    public ArrayList<Role> getByUsernameAndUrl(String username, String url) {
+        ArrayList<Role> roles = new ArrayList<>();
         try {
-            String sql = "SELECT username,password  FROM Account\n"
-                    + "where username=? and password=?";
+            String sql = "SELECT ro.reId, ro.reName FROM Account ac\n"
+                    + "join RoleAccount ra on ra.username = ac.username\n"
+                    + "join Role ro on ro.reId=ra.reId\n"
+                    + "join RoleFeature rf on rf.reId=ro.reId\n"
+                    + "join Feature f on f.fId=rf.fId\n"
+                    + "where ac.username=? and f.url=?";
 
             PreparedStatement stm = connection.prepareStatement(sql);
             stm.setString(1, username);
-            stm.setString(2, password);
+            stm.setString(2, url);
             ResultSet rs = stm.executeQuery();
-            if (rs.next()) {
-                Account account = new Account();
-                account.setUsername(rs.getString("username"));
-                account.setPassword(rs.getString("password"));
-                return account;
+            while (rs.next()) {
+                Role r = new Role();
+                r.setRoID(rs.getInt("reId"));
+                r.setRoName(rs.getString("reName"));
+                roles.add(r);
+
             }
 
         } catch (SQLException ex) {
-            Logger.getLogger(AccountDBContext.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(RoleDBContext.class.getName()).log(Level.SEVERE, null, ex);
         }
-        return null;
+        return roles;
     }
 
     @Override
-    public ArrayList<Account> list() {
+    public ArrayList<Role> list() {
         throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
 
     @Override
-    public void insert(Account entity) {
+    public void insert(Role entity) {
         throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
 
     @Override
-    public void update(Account entity) {
+    public void update(Role entity) {
         throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
 
     @Override
-    public void delete(Account entity) {
+    public void delete(Role entity) {
         throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
 
     @Override
-    public Account get(int id) {
+    public Role get(int id) {
         throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
 

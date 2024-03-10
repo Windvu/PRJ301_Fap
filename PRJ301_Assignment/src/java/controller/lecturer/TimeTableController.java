@@ -4,12 +4,14 @@
  */
 package controller.lecturer;
 
+import controller.authentication.BaseRBACController;
 import controller.authentication.BaseRequire;
 import dal.AccountDBContext;
 import dal.LessonDBContext;
 import dal.TimeSlotDBContext;
 import entity.Account;
 import entity.Lesson;
+import entity.Role;
 import entity.TimeSlot;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -25,16 +27,10 @@ import util.DateTimeHelper;
  *
  * @author Vu Minh Quan
  */
-public class TimeTableController extends BaseRequire {
+public class TimeTableController extends BaseRBACController {
 
     @Override
-    protected void doPost(HttpServletRequest req, HttpServletResponse resp, Account account) throws ServletException, IOException {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
-    }
-
-    @Override
-    protected void doGet(HttpServletRequest req, HttpServletResponse resp, Account account) throws ServletException, IOException {
-
+    protected void doGet(HttpServletRequest req, HttpServletResponse resp, Account account, ArrayList<Role> roles) throws ServletException, IOException {
         TimeSlotDBContext timeDB = new TimeSlotDBContext();
         ArrayList<TimeSlot> slots = timeDB.list();
 
@@ -64,8 +60,11 @@ public class TimeTableController extends BaseRequire {
         req.setAttribute("to", to);
         req.setAttribute("slots", slots);
         req.setAttribute("lessons", lessons);
-        req.getRequestDispatcher("../view/lecturer/timetable.jsp").forward(req, resp);
+        req.getRequestDispatcher("../view/lecturer/timetable.jsp").forward(req, resp);    }
 
+    @Override
+    protected void doPost(HttpServletRequest req, HttpServletResponse resp, Account account, ArrayList<Role> roles) throws ServletException, IOException {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
 
 }

@@ -20,6 +20,10 @@
         <servlet-name>LogoutController</servlet-name>
         <servlet-class>controller.authentication.LogoutController</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>AssessmentGradeController</servlet-name>
+        <servlet-class>controller.student.AssessmentGradeController</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>BaseRequire</servlet-name>
         <url-pattern>/baserequire</url-pattern>
@@ -39,5 +43,9 @@
     <servlet-mapping>
         <servlet-name>LogoutController</servlet-name>
         <url-pattern>/logout</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>AssessmentGradeController</servlet-name>
+        <url-pattern>/student/grade</url-pattern>
     </servlet-mapping>
 </web-app>
