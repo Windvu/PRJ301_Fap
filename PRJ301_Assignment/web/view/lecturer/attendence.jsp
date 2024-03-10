@@ -11,16 +11,72 @@
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>Attendence Of Lectuer</title>
         <style>
-            td{
-               text-align: center;
+            /* CSS for table styling */
+            table {
+                border-collapse: collapse; /* Remove default spacing between table cells */
+                width: 100%; /* Set table width to 100% of its container */
+            }
+
+            /* Styling for table header */
+            .table_header {
+                background-color: darkorange; /* Background color orange */
+                color: white; /* Text color white */
+                border: 1px solid black; /* Solid black border around cells */
+                padding: 8px; /* Add padding to th elements */
+                text-align: center; /* Center align text */
+            }
+
+            /* Styling for table cells */
+            td {
+                border: 1px solid black; /* Solid black border around cells */
+                padding: 8px; /* Add padding to td elements */
+                text-align: center; /* Center align text */
+            }
+
+            /* Styling for alternate rows */
+            tr:nth-child(even) {
+                background-color: #f2f2f2; /* Light gray background color for even rows */
+            }
+
+            .container {
+                display: flex; /* Sử dụng flexbox để căn chỉnh */
+                justify-content: space-between; /* Căn đều các phần tử con */
+                align-items: center; /* Căn giữa theo chiều dọc */
+                padding: 10px; /* Thêm padding để tạo khoảng cách */
+            }
+            .title {
+                flex-grow: 1; /* Tiêu đề sẽ mở rộng để chiếm hết không gian còn lại */
+                text-align: center; /* Căn giữa theo chiều ngang */
             }
         </style>
+
+        <script>
+            function logout() {
+                window.location.href = "../logout";
+            }
+        </script>
     </head>
     <body>
+        <div class="container">
+            <img src="../images/FPT_Education_logo.svg.png" alt="Logo_FPT" style="width:250px; height: 100px;">
+            <h1 class="title">Lecturer's attendence</h1>
+            <div style="width: 250px; display: flex; ">
+                <c:forEach items="${requestScope.lessons}" var="less">
+                    <c:if test="${param.id eq less.leID}">
+                        <div style="background-color: green; color: white; padding: 5px; margin-right: 10px; border-radius: 5px ">
+                            ${less.lecturer.lID} <!-- Hiển thị tên nhóm -->
+                        </div>
+                    </c:if>
+                </c:forEach>
+                <div style="border-left: 1px solid black; margin-right: 10px;"></div>
+                <input style="background-color: green; color: white; border-radius: 5px;padding: 5px;"  type="button" value="Log out" onclick="logout()">
+            </div>
+        </div>
+
         <form action="attendence" method="POST">
             <input type="hidden" name="id" value="${param.id}"/>
             <table border="1px">
-                <tr>
+                <tr class="table_header">
                     <td>NO</td>
                     <td>GROUP</td>
                     <td>CODE</td>
@@ -37,13 +93,12 @@
                     <tr>
                         <!-- NO -->
                         <td >
-                             ${count}
+                            ${count}
                         </td>
                         <!-- GROUP -->
                         <c:forEach items="${requestScope.lessons}" var="less">
                             <c:if test="${param.id eq less.leID}">
                                 <td>${less.group.gName}</td> <!-- Hiển thị tên nhóm -->
-
                             </c:if>
                         </c:forEach>
 
@@ -71,7 +126,7 @@
                         <!--TAKER-->
                         <c:forEach items="${requestScope.lessons}" var="less">
                             <c:if test="${param.id eq less.leID}">
-                                
+
                                 <td>${less.lecturer.lID}</td> <!-- Hiển thị mã giáo viên -->
                             </c:if>
                         </c:forEach>
@@ -81,7 +136,7 @@
                     <c:set var="count" value="${count + 1}" scope="page"/> <!-- Tăng biến đếm sau mỗi lần lặp -->
                 </c:forEach>
             </table>
-            <input type="submit" value="Save"/>
+                    <input style="width: 100%; color: white; background-color: darkorange; padding: 10px; font-size: 20px" type="submit" value="Save"/>              
         </form>
     </body>
 </html>
