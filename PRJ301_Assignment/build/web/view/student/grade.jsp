@@ -16,6 +16,7 @@
                 display: flex;
                 min-height: calc(80vh - 20px); /* Chiều cao tối thiểu của khối wrapper là 100% chiều cao của viewport trừ đi 20px */
                 margin-bottom: -20px; /* Lề dưới âm để đảm bảo khối wrapper sẽ chạm vào đáy trình duyệt */
+
             }
             .subject {
                 margin-right: 20px;
@@ -72,10 +73,19 @@
                 justify-content: space-between; /* Căn đều các phần tử con */
                 align-items: center; /* Căn giữa theo chiều dọc */
                 padding: 10px; /* Thêm padding để tạo khoảng cách */
+                border: 1px solid #ccc; /* Đặt đường viền cho khung */
+                padding: 10px; /* Thêm padding để tạo khoảng cách giữa khung và nội dung */
+                margin-bottom: 50px; /* Thêm margin để tạo khoảng cách giữa các khung */
+                box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2); /* Thêm đổ bóng */
             }
-            
+
+
             .footer {
-                height: 20px; /* Độ cao của phần footer */
+                border: 1px solid #ccc; /* Đặt đường viền cho khung */
+                padding: 10px; /* Thêm padding để tạo khoảng cách giữa khung và nội dung */
+                margin-bottom: 20px; /* Thêm margin để tạo khoảng cách giữa các khung */
+                box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2); /* Thêm đổ bóng */
+                margin-top: 100px
             }
         </style>
         <script>
@@ -104,7 +114,7 @@
     <body>
         <div class="container_header">
             <img src="../images/FPT_Education_logo.svg.png" alt="Logo_FPT" style="width:250px; height: 100px;">
-            <h1 class="title">Lecturer's attendence</h1>
+            <h1 class="title">Student' score</h1>
             <div style="width: 250px; display: flex; ">
                 <c:forEach items="${requestScope.students}" var="student">
                     <c:if test="${param.id eq student.sID}">
@@ -151,8 +161,12 @@
                             <c:if test="${score.subject.suID eq sub.suID}">
                                 <tr>
                                     <td>${score.category}</td>
-                                    <td>${score.assName}</td>                                   
-                                    <td><fmt:formatNumber value="${score.weight * 100}" pattern="0'%'" /></td>                                  
+                                    <td>${score.assName}</td>      
+                                    <td>
+                                        <c:if test="${!score.subject.suID.endsWith('c')}">
+                                            <fmt:formatNumber value="${score.weight * 100}" pattern="0'%'" />
+                                        </c:if>     
+                                    </td>
                                     <c:if test="${score.grade.score > -1}">
                                         <td>  ${score.grade.score}</td>
                                     </c:if>
@@ -163,6 +177,43 @@
                                 </tr>                               
                             </c:if>
                         </c:forEach>
+
+                        <c:set var="totalScore" value="0" />
+                        <c:forEach items="${requestScope.grade}" var="score">
+                            <c:if test="${score.subject.suID eq sub.suID}">
+                                <c:if test="${score.grade.score > -1}">
+                                    <c:set var="totalScore" value="${totalScore + score.grade.score*score.weight}" />
+                                </c:if>
+                            </c:if>
+                        </c:forEach>
+
+                        <%-- Chuyển totalScore thành JavaScript string và làm tròn số sau dấu thập phân --%>
+                        <script>
+                            var totalScoreValue = <c:out value="${totalScore}" />;
+                            var roundedTotalScore = parseFloat(totalScoreValue).toFixed(1);
+                        </script>
+
+                        <tr>
+                            <td rowspan="2">Course total</td>
+                            <td >Average</td>
+                            <td colspan="3">
+                                <%-- Hiển thị giá trị đã được làm tròn --%>
+                                <script>document.write(roundedTotalScore);</script>
+                            </td>    
+                        </tr>
+
+
+                        <tr>
+                            <td >Status</td>
+                            <td colspan="3">  
+                                <c:if test="${totalScore >= 5}">
+                                    <font color="Green">Passed</font>
+                                </c:if>
+                                <c:if test="${totalScore < 5}">
+                                    <font color="Red">Not passed</font>
+                                </c:if>
+                            </td>
+                        </tr>
                     </table>
                 </c:forEach>
             </div>

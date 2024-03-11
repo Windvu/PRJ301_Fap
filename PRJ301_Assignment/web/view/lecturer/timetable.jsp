@@ -14,6 +14,7 @@
             table {
                 width: 100%;
                 border-collapse: collapse;
+
             }
             table, th, td {
                 border: 1px solid black;
@@ -27,15 +28,27 @@
                 justify-content: space-between; /* Căn đều các phần tử con */
                 align-items: center; /* Căn giữa theo chiều dọc */
                 padding: 10px; /* Thêm padding để tạo khoảng cách */
+                border: 1px solid #ccc; /* Đặt đường viền cho khung */
+                padding: 10px; /* Thêm padding để tạo khoảng cách giữa khung và nội dung */
+                margin-bottom: 20px; /* Thêm margin để tạo khoảng cách giữa các khung */
+                box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2); /* Thêm đổ bóng */
             }
             .title {
                 flex-grow: 1; /* Tiêu đề sẽ mở rộng để chiếm hết không gian còn lại */
                 text-align: center; /* Căn giữa theo chiều ngang */
             }
+            
+            .footer {
+                border: 1px solid #ccc; /* Đặt đường viền cho khung */
+                padding: 10px; /* Thêm padding để tạo khoảng cách giữa khung và nội dung */
+                margin-bottom: 20px; /* Thêm margin để tạo khoảng cách giữa các khung */
+                box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2); /* Thêm đổ bóng */
+                
+            }
         </style>
         <script>
-            function logout(){
-                 window.location.href = "../logout";
+            function logout() {
+                window.location.href = "../logout";
             }
         </script>
     </head>
@@ -45,16 +58,14 @@
             <img src="../images/FPT_Education_logo.svg.png" alt="Logo_FPT" style="width:250px; height: 100px;">
             <h1 class="title">Lecturer's work schedule</h1>
             <div style="width: 250px; display: flex; ">
-                <c:forEach items="${requestScope.lessons}" var="les" varStatus="loop">
-                    <!-- Kiểm tra xem là lần lặp đầu tiên -->
-                    <c:if test="${loop.first}">
-                        <div style="background-color: green; color: white; padding: 5px; margin-right: 10px; border-radius: 5px ">
-                            ${les.lecturer.lID} <!-- Hiển thị giá trị -->
-                        </div>
-                    </c:if>
-                </c:forEach>
-                <div style="border-left: 1px solid black; margin-right: 10px;"></div>
-                <input style="background-color: green; color: white; border-radius: 5px;padding: 5px;"  type="button" value="Log out" onclick="logout()">
+                <c:if test="${not empty param.id}">
+                    <div style="background-color: green; color: white; padding: 5px; margin-right: 10px; border-radius: 5px ">
+                        ${param.id} <!-- Hiển thị giá trị -->
+                    </div>
+                    <div style="border-left: 1px solid black; margin-right: 10px;"></div>
+                    <input style="background-color: green; color: white; border-radius: 5px;padding: 5px;"  type="button" value="Log out" onclick="logout()">
+                </c:if>
+
             </div>
         </div>
         <div style="margin-left: 30px">
@@ -73,8 +84,10 @@
             <!-- ***Line display the day***  -->
             <tr>
                 <!-- Choose the days -->
+
                 <td rowspan="2" style="background-color: darkorange">
                     <form action="timetable" method="GET">           
+                        <input type="hidden" name="id" value="${param.id}"/>
                         <input type="date" value="${requestScope.from}" name="from"/>  <br>
                         <input value="${requestScope.to}" type="date" name="to"/> <br>
                         <input type="submit" value="Show"/>
@@ -89,7 +102,7 @@
                     </td>
                     <!--column dividing the weeks -->
                     <c:if test="${d.dayName eq 'SATURDAY'}">
-                        <td style="background-color: darkorange"></td>
+                        <td style="background-color: darkorange" ></td>
                     </c:if>
 
             </c:forEach><br>
@@ -137,7 +150,7 @@
                             </c:forEach>
                         </td>
                         <c:if test="${d.dayName eq 'SATURDAY'}">
-                            <td style="background-color: darkorange"></td>
+                            <td style="background-color: darkorange" ></td>
                         </c:if>
                     </c:forEach>
                 </tr>  
@@ -152,10 +165,12 @@
             <p>
 
                 (<b style="color: green">attended</b>): You had attended this activity / Bạn đã tham gia hoạt động này<br>
-                (<b style="color: red">absent</b>): You had NOT attended this activity / Bạn đã vắng mặt buổi này<br>
+                (<b style="color: red">Not yet</b>): You have NOT attended this activity / Bạn chưa có mặt buổi này<br>
 
             </p>  
         </div>
-
+        <div class="footer">
+            <p style="text-align: center">Mọi góp ý, thắc mắc xin liên hệ: Phòng dịch vụ giáo viên: Email: <b>dichvugiaovien@fe.edu.vn</b>. Điện thoại: (024)7308.13.13</p>
+        </div>
     </body>
 </html>

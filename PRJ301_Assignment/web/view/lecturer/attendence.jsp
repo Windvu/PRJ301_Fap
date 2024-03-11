@@ -15,6 +15,7 @@
             table {
                 border-collapse: collapse; /* Remove default spacing between table cells */
                 width: 100%; /* Set table width to 100% of its container */
+
             }
 
             /* Styling for table header */
@@ -43,10 +44,23 @@
                 justify-content: space-between; /* Căn đều các phần tử con */
                 align-items: center; /* Căn giữa theo chiều dọc */
                 padding: 10px; /* Thêm padding để tạo khoảng cách */
+                border: 1px solid #ccc; /* Đặt đường viền cho khung */
+                padding: 10px; /* Thêm padding để tạo khoảng cách giữa khung và nội dung */
+                margin-bottom: 50px; /* Thêm margin để tạo khoảng cách giữa các khung */
+                box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2); /* Thêm đổ bóng */
             }
             .title {
                 flex-grow: 1; /* Tiêu đề sẽ mở rộng để chiếm hết không gian còn lại */
                 text-align: center; /* Căn giữa theo chiều ngang */
+            }
+            .footer {
+                border: 1px solid #ccc; /* Đặt đường viền cho khung */
+                padding: 10px; /* Thêm padding để tạo khoảng cách giữa khung và nội dung */
+                margin-bottom: 20px; /* Thêm margin để tạo khoảng cách giữa các khung */
+                margin-top: 50px;
+                box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2); /* Thêm đổ bóng */
+                
+                
             }
         </style>
 
@@ -66,10 +80,11 @@
                         <div style="background-color: green; color: white; padding: 5px; margin-right: 10px; border-radius: 5px ">
                             ${less.lecturer.lID} <!-- Hiển thị tên nhóm -->
                         </div>
+                        <div style="border-left: 1px solid black; margin-right: 10px;"></div>
+                        <input style="background-color: green; color: white; border-radius: 5px;padding: 5px;"  type="button" value="Log out" onclick="logout()">
                     </c:if>
                 </c:forEach>
-                <div style="border-left: 1px solid black; margin-right: 10px;"></div>
-                <input style="background-color: green; color: white; border-radius: 5px;padding: 5px;"  type="button" value="Log out" onclick="logout()">
+
             </div>
         </div>
 
@@ -136,7 +151,10 @@
                     <c:set var="count" value="${count + 1}" scope="page"/> <!-- Tăng biến đếm sau mỗi lần lặp -->
                 </c:forEach>
             </table>
-                    <input style="width: 100%; color: white; background-color: darkorange; padding: 10px; font-size: 20px" type="submit" value="Save"/>              
+            <input style="width: 100%; color: white; background-color: darkorange; padding: 10px; font-size: 20px" type="submit" value="Save"/>              
         </form>
+        <div class="footer">
+            <p style="text-align: center">Mọi góp ý, thắc mắc xin liên hệ: Phòng dịch vụ giáo viên: Email: <b>dichvugiaovien@fe.edu.vn</b>. Điện thoại: (024)7308.13.13</p>
+        </div>
     </body>
 </html>

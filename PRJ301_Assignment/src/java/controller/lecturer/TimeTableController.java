@@ -31,6 +31,7 @@ public class TimeTableController extends BaseRBACController {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp, Account account, ArrayList<Role> roles) throws ServletException, IOException {
+        String lID= req.getParameter("id");
         TimeSlotDBContext timeDB = new TimeSlotDBContext();
         ArrayList<TimeSlot> slots = timeDB.list();
 
@@ -53,7 +54,7 @@ public class TimeTableController extends BaseRBACController {
         }
 
         LessonDBContext lessDB = new LessonDBContext();
-        ArrayList<Lesson> lessons = lessDB.getLessonBy(account.getUsername(), from, to);
+        ArrayList<Lesson> lessons = lessDB.getLessonBy(lID, from, to);
 
         req.setAttribute("dates", DateTimeHelper.toList(from, to));
         req.setAttribute("from", from);
