@@ -5,7 +5,6 @@
 package controller.lecturer;
 
 import controller.authentication.BaseRBACController;
-import controller.authentication.BaseRequire;
 import dal.LessonDBContext;
 import dal.StudentDBContext;
 import entity.Account;
@@ -14,9 +13,7 @@ import entity.Lesson;
 import entity.Role;
 import entity.Student;
 import java.io.IOException;
-import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
-import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.util.ArrayList;
@@ -33,6 +30,8 @@ public class LecturerAttendentController extends BaseRBACController {
         LessonDBContext lesDB = new LessonDBContext();
         ArrayList<Attendence> atts = lesDB.getAttendencesByLesson(leid);
         ArrayList<Lesson> less = lesDB.retakeAttendent();
+                     
+        req.setAttribute("coreName", account.getUsername());
         req.setAttribute("lessons", less);
         req.setAttribute("atts", atts);
         req.getRequestDispatcher("../view/lecturer/attendence.jsp").forward(req, resp);
@@ -43,7 +42,7 @@ public class LecturerAttendentController extends BaseRBACController {
         String leid = req.getParameter("id");
         LessonDBContext lesDB = new LessonDBContext();
         ArrayList<Lesson> less = lesDB.retakeAttendent();
-        //ArrayList<Attendence> attDB = lesDB.getAttendencesByLesson(leid);
+       
 //Take date from Screen       
         StudentDBContext db = new StudentDBContext();
         ArrayList<Student> students = db.getStudentsByLessionId(leid);
@@ -58,8 +57,8 @@ public class LecturerAttendentController extends BaseRBACController {
             att.setIsPresent(req.getParameter("present" + student.getsID()).equals("yes"));
             atts.add(att);
         }
+        
 //Change data 
-
         for (Lesson les : less) {
             if (les.getLeID().equals(leid)) {
                 lesson.setAttended(les.isAttended());
@@ -77,7 +76,5 @@ public class LecturerAttendentController extends BaseRBACController {
             }
             resp.sendRedirect("attendence?id=" + leid);
         }
-
     }
-
 }

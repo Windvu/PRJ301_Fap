@@ -66,7 +66,7 @@ public class LoginController extends HttpServlet {
             if (roleArr.size() >= 1) {
                 response.sendRedirect("lecturer/timetable?id=" + account.getUsername());
             } else {
-                response.sendRedirect("student/grade?id=" + sID);
+                response.sendRedirect("student/home?id=" + sID);
             }
 
         } else {

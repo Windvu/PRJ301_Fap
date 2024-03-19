@@ -31,7 +31,8 @@ public abstract class BaseRBACController extends BaseRequire {
     protected void doPost(HttpServletRequest req, HttpServletResponse resp, Account account) throws ServletException, IOException {
         ArrayList<Role> roles = getRoles(account, req);
         if (roles.size() < 1) {
-            resp.getWriter().println("access denied!");
+            resp.getWriter().println("<a href='../login'><h3>Login</h3></a>");
+            resp.getWriter().println("<h3>access denied!</h3>");
         } else {
            doPost(req, resp, account, roles);
         }
@@ -44,7 +45,8 @@ public abstract class BaseRBACController extends BaseRequire {
     protected void doGet(HttpServletRequest req, HttpServletResponse resp, Account account) throws ServletException, IOException {
         ArrayList<Role> roles = getRoles(account, req);
         if (roles.size() < 1) {
-            resp.getWriter().println("access denied!");
+            resp.getWriter().println("<a href='../login'><h3>Login</h3></a>");
+            resp.getWriter().println("<h3>access denied!</h3>");
         } else {
             
              doGet(req, resp, account, roles);

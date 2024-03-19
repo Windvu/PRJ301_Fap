@@ -37,13 +37,13 @@
                 flex-grow: 1; /* Tiêu đề sẽ mở rộng để chiếm hết không gian còn lại */
                 text-align: center; /* Căn giữa theo chiều ngang */
             }
-            
+
             .footer {
                 border: 1px solid #ccc; /* Đặt đường viền cho khung */
                 padding: 10px; /* Thêm padding để tạo khoảng cách giữa khung và nội dung */
                 margin-bottom: 20px; /* Thêm margin để tạo khoảng cách giữa các khung */
                 box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2); /* Thêm đổ bóng */
-                
+
             }
         </style>
         <script>
@@ -53,21 +53,29 @@
         </script>
     </head>
     <body>
+
+
+
         <!-- ***title frame*** -->
         <div class="container">
-            <img src="../images/FPT_Education_logo.svg.png" alt="Logo_FPT" style="width:250px; height: 100px;">
+            <a href="timetable?id=${requestScope.coreName}">
+                <img src="../images/FPT_Education_logo.svg.png" alt="Logo_FPT" style="width:250px; height: 100px;">
+            </a>            
             <h1 class="title">Lecturer's work schedule</h1>
             <div style="width: 250px; display: flex; ">
-                <c:if test="${not empty param.id}">
-                    <div style="background-color: green; color: white; padding: 5px; margin-right: 10px; border-radius: 5px ">
-                        ${param.id} <!-- Hiển thị giá trị -->
-                    </div>
-                    <div style="border-left: 1px solid black; margin-right: 10px;"></div>
-                    <input style="background-color: green; color: white; border-radius: 5px;padding: 5px;"  type="button" value="Log out" onclick="logout()">
-                </c:if>
-
+                <div style="background-color: green; color: white; padding: 5px; margin-right: 10px; border-radius: 5px ">
+                    <a href="profile?id=${requestScope.coreName}" style="text-decoration: none; color: white;">
+                        ${requestScope.coreName}
+                    </a>
+                </div>
+                <div style="border-left: 1px solid black; margin-right: 10px;"></div>
+                <input style="background-color: green; color: white; border-radius: 5px;padding: 5px;"  type="button" value="Log out" onclick="logout()">
             </div>
         </div>
+
+
+
+        <!-- Note room  -->
         <div style="margin-left: 30px">
             <h3 style="">NOTE:</h3>
             <p>
@@ -80,15 +88,17 @@
             </p>
         </div>
 
+
+
+        <!-- Timetable -->
         <table border="1px">
             <!-- ***Line display the day***  -->
             <tr>
                 <!-- Choose the days -->
-
                 <td rowspan="2" style="background-color: darkorange">
                     <form action="timetable" method="GET">           
                         <input type="hidden" name="id" value="${param.id}"/>
-                        <input type="date" value="${requestScope.from}" name="from"/>  <br>
+                        <input type="date" value="${requestScope.from}" name="from"/><br>
                         <input value="${requestScope.to}" type="date" name="to"/> <br>
                         <input type="submit" value="Show"/>
                     </form>
@@ -104,9 +114,9 @@
                     <c:if test="${d.dayName eq 'SATURDAY'}">
                         <td style="background-color: darkorange" ></td>
                     </c:if>
-
-            </c:forEach><br>
+                </c:forEach><br>
             </tr>
+
 
             <tr>              
                 <c:forEach items="${requestScope.dates}" var="d">
@@ -123,11 +133,16 @@
                 </c:forEach><br>
             </tr>
 
-            <!-- ***Slots*** -->
+            
+            <!-- Slots -->
             <c:set var="currentTime" value="<%= new java.util.Date() %>" />
+            
+            <!-- The position of lesson -->
             <c:forEach items="${requestScope.slots}" var="slot">
                 <tr>
+                    <!-- Slot column -->
                     <td style="background-color: darkorange; font-weight: bold;color: white ">${slot.tName}</td>
+                    
                     <c:forEach items="${requestScope.dates}" var="d">
                         <td>
                             <c:forEach items="${requestScope.lessons}" var="les">
@@ -135,7 +150,6 @@
                                     <a href="attendence?id=${les.leID}" > 
                                         ${les.group.gName} <br>    
                                     </a>
-
                                     - ${les.group.subject.suID}<br>
                                     at ${les.room.rName}<br>
                                     <c:if test="${les.attended eq true}">
@@ -145,21 +159,26 @@
                                         (<b style="color: red">Not yet</b>)<br>
                                         ${les.slot.tDescript}
                                     </c:if>
-
                                 </c:if>
                             </c:forEach>
                         </td>
+                        <!--column dividing the weeks -->
                         <c:if test="${d.dayName eq 'SATURDAY'}">
                             <td style="background-color: darkorange" ></td>
                         </c:if>
                     </c:forEach>
                 </tr>  
             </c:forEach>
+                
             <!-- The rows of timetable -->    
             <tr style="background-color: darkorange;">
                 <td colspan="100%"></td>
             </tr>
         </table>
+
+
+
+        <!-- ***Note attendance*** -->
         <div style="margin-left: 30px; margin-bottom: 30px">
             <h4>More note / Chú thích thêm:</h4>            
             <p>
@@ -169,6 +188,10 @@
 
             </p>  
         </div>
+
+
+
+        <!-- ***Contact*** -->
         <div class="footer">
             <p style="text-align: center">Mọi góp ý, thắc mắc xin liên hệ: Phòng dịch vụ giáo viên: Email: <b>dichvugiaovien@fe.edu.vn</b>. Điện thoại: (024)7308.13.13</p>
         </div>

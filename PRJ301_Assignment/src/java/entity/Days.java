@@ -11,8 +11,8 @@ import java.sql.Date;
  * @author Vu Minh Quan
  */
 public class Days {
-    private String dayName;
-    private java.sql.Date day;
+    private String dayName;//Thứ
+    private java.sql.Date day;//Ngày
 
     public Days() {
     }

@@ -113,21 +113,29 @@
     </head>
     <body>
         <div class="container_header">
-            <img src="../images/FPT_Education_logo.svg.png" alt="Logo_FPT" style="width:250px; height: 100px;">
+            <a href="home?id=${requestScope.ID}">
+                <img src="../images/FPT_Education_logo.svg.png" alt="Logo_FPT" style="width:250px; height: 100px;">
+            </a> 
             <h1 class="title">Student' score</h1>
             <div style="width: 250px; display: flex; ">
-                <c:forEach items="${requestScope.students}" var="student">
-                    <c:if test="${param.id eq student.sID}">
-                        <div style="background-color: green; color: white; padding: 5px; margin-right: 10px; border-radius: 5px ">
-                            ${student.coreName} <!-- Hiển thị tên nhóm -->
-                        </div>
-                    </c:if>
-                </c:forEach>
+
+                <div style="background-color: green; color: white; padding: 5px; margin-right: 10px; border-radius: 5px ">
+                    <a href="profile?id=${requestScope.ID}" style="text-decoration: none; color: white;">
+                        ${requestScope.coreName}
+                    </a>
+                </div>
+
                 <div style="border-left: 1px solid black; margin-right: 10px;"></div>
                 <input style="background-color: green; color: white; border-radius: 5px;padding: 5px;"  type="button" value="Log out" onclick="logout()">
             </div>
         </div>
 
+        <div style="margin-left: 50px; margin-bottom: 30px">
+            <h2>Option</h2>
+            <a href="attendstudent?id=${requestScope.ID}">Course attendance</a> |
+            <a href="grade?id=${requestScope.ID}">Grade</a> 
+        </div>
+        
         <div class="container">
 
             <!-- Subject -->
@@ -149,10 +157,15 @@
             <div class="score">
                 <c:forEach items="${requestScope.subject}" var="sub">
                     <table id="${sub.suID}" class="subjectGrade hidden" border="1px">
+
                         <tr class="header_score">
                             <td>GRADE CATEGORY</td>
                             <td>GRADE ITEM</td>
-                            <td>WEIGHT</td>
+
+                            <c:if test="${!sub.suID.endsWith('c')}">
+                                <td>WEIGHT</td> 
+                            </c:if>
+
                             <td>VALUE</td>
                             <td>COMMENT</td>
                         </tr>
@@ -162,11 +175,11 @@
                                 <tr>
                                     <td>${score.category}</td>
                                     <td>${score.assName}</td>      
-                                    <td>
-                                        <c:if test="${!score.subject.suID.endsWith('c')}">
-                                            <fmt:formatNumber value="${score.weight * 100}" pattern="0'%'" />
-                                        </c:if>     
-                                    </td>
+
+                                    <c:if test="${!score.subject.suID.endsWith('c')}">
+                                        <td><fmt:formatNumber value="${score.weight * 100}" pattern="0'%'" /></td>
+                                    </c:if>     
+
                                     <c:if test="${score.grade.score > -1}">
                                         <td>  ${score.grade.score}</td>
                                     </c:if>
@@ -192,25 +205,38 @@
                             var totalScoreValue = <c:out value="${totalScore}" />;
                             var roundedTotalScore = parseFloat(totalScoreValue).toFixed(1);
                         </script>
-
+                        <%-- check status --%>
+                        <c:set var="studyingFlag" value="false" />
+                        <c:forEach items="${requestScope.grade}" var="score">
+                            <c:if test="${score.subject.suID eq sub.suID and score.grade.score == -1}">
+                                <c:set var="studyingFlag" value="true" />
+                            </c:if>
+                        </c:forEach>
                         <tr>
                             <td rowspan="2">Course total</td>
                             <td >Average</td>
                             <td colspan="3">
-                                <%-- Hiển thị giá trị đã được làm tròn --%>
-                                <script>document.write(roundedTotalScore);</script>
+                                <%-- Hiển thị giá trị đã được làm tròn --%>  
+                                <c:if test="${studyingFlag==false}">
+                                    <script>document.write(roundedTotalScore);</script>
+                                </c:if>
+
                             </td>    
                         </tr>
-
-
                         <tr>
                             <td >Status</td>
                             <td colspan="3">  
-                                <c:if test="${totalScore >= 5}">
-                                    <font color="Green">Passed</font>
+                                <c:if test="${studyingFlag}">
+                                    <font color="green">Studying</font>
                                 </c:if>
-                                <c:if test="${totalScore < 5}">
-                                    <font color="Red">Not passed</font>
+
+                                <c:if test="${studyingFlag == false}">
+                                    <c:if test="${totalScore >= 5}">
+                                        <font color="Green">Passed</font>
+                                    </c:if>
+                                    <c:if test="${totalScore < 5}">
+                                        <font color="Red">Not passed</font>
+                                    </c:if>
                                 </c:if>
                             </td>
                         </tr>

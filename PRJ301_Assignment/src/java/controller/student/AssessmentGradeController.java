@@ -26,41 +26,43 @@ import java.util.ArrayList;
  */
 public class AssessmentGradeController extends BaseRBACController {
 
-
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp, Account account, ArrayList<Role> roles) throws ServletException, IOException {
-        String sID=null;        
+        String sID = null;
         AssessmentDBContext gradeDB = new AssessmentDBContext();
-        ArrayList<Subject> subArr = gradeDB.subjectGrade();        
-        ArrayList<Student> stArr=gradeDB.studentArray();
-        for(Student student: stArr){
-            if(student.getCoreName().equals(account.getUsername())){
-                sID=student.getsID();
+        ArrayList<Subject> subArr = gradeDB.subjectGrade();
+        ArrayList<Student> stArr = gradeDB.studentArray();
+        for (Student student : stArr) {
+            if (student.getCoreName().equals(account.getUsername())) {
+                sID = student.getsID();
             }
         }
-        
+
+
         ArrayList<Assessment> assArr = gradeDB.assessmentGrade(sID);
-        req.setAttribute("students", stArr);
+        req.setAttribute("ID", sID);
+        req.setAttribute("coreName", account.getUsername());
         req.setAttribute("grade", assArr);
         req.setAttribute("subject", subArr);
-        req.getRequestDispatcher("../view/student/grade.jsp").forward(req, resp);    
+        req.getRequestDispatcher("../view/student/grade.jsp").forward(req, resp);
     }
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp, Account account, ArrayList<Role> roles) throws ServletException, IOException {
-       String sID=null;        
+        String sID = null;
         AssessmentDBContext gradeDB = new AssessmentDBContext();
-        ArrayList<Subject> subArr = gradeDB.subjectGrade();        
-        ArrayList<Student> stArr=gradeDB.studentArray();
-        for(Student student: stArr){
-            if(student.getCoreName().equals(account.getUsername())){
-                sID=student.getsID();
+        ArrayList<Subject> subArr = gradeDB.subjectGrade();
+        ArrayList<Student> stArr = gradeDB.studentArray();
+        for (Student student : stArr) {
+            if (student.getCoreName().equals(account.getUsername())) {
+                sID = student.getsID();
             }
         }
-        
+
         ArrayList<Assessment> assArr = gradeDB.assessmentGrade(sID);
         req.setAttribute("grade", assArr);
         req.setAttribute("subject", subArr);
-        req.getRequestDispatcher("../view/student/grade.jsp").forward(req, resp);  }
+        req.getRequestDispatcher("../view/student/grade.jsp").forward(req, resp);
+    }
 
 }

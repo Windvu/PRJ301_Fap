@@ -5,8 +5,6 @@
 package controller.lecturer;
 
 import controller.authentication.BaseRBACController;
-import controller.authentication.BaseRequire;
-import dal.AccountDBContext;
 import dal.LessonDBContext;
 import dal.TimeSlotDBContext;
 import entity.Account;
@@ -14,9 +12,7 @@ import entity.Lesson;
 import entity.Role;
 import entity.TimeSlot;
 import java.io.IOException;
-import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
-import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.sql.Date;
@@ -40,12 +36,15 @@ public class TimeTableController extends BaseRBACController {
         Date from = null;
         Date to = null;
         java.util.Date today = new java.util.Date();
+        
+        //Take the begin day
         if (raw_from == null) {
             from = DateTimeHelper.convertUtilToSql(DateTimeHelper.getBeginningOfWeek(today));
         } else {
             from = Date.valueOf(raw_from);
         }
 
+        //Take the end day        
         if (raw_to == null) {
             java.util.Date beginWeek = DateTimeHelper.getBeginningOfWeek(today);
             to = DateTimeHelper.convertUtilToSql(DateTimeHelper.addDaysToDate(beginWeek, 6));
@@ -56,6 +55,7 @@ public class TimeTableController extends BaseRBACController {
         LessonDBContext lessDB = new LessonDBContext();
         ArrayList<Lesson> lessons = lessDB.getLessonBy(lID, from, to);
 
+        req.setAttribute("coreName", account.getUsername());
         req.setAttribute("dates", DateTimeHelper.toList(from, to));
         req.setAttribute("from", from);
         req.setAttribute("to", to);

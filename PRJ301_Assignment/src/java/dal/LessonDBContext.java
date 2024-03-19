@@ -25,8 +25,10 @@ import java.util.logging.Logger;
  * @author Vu Minh Quan
  */
 public class LessonDBContext extends DBContext<Lesson> {
+    
 //Retake attendence
-
+    
+    //Update the status of students
     public void UpdateAttendence(String leID, String sID, boolean isPresent, String aDescript) {
         try {
             // Kiểm tra xem mô tả mới có khác với mô tả hiện tại không
@@ -44,9 +46,9 @@ public class LessonDBContext extends DBContext<Lesson> {
         } catch (SQLException ex) {
             Logger.getLogger(LessonDBContext.class.getName()).log(Level.SEVERE, null, ex);
         }
-
     }
 
+    //Take the data in DB to compare
     public ArrayList<Lesson> retakeAttendent() {
         ArrayList<Lesson> lessons = new ArrayList<>();
         try {
@@ -55,7 +57,7 @@ public class LessonDBContext extends DBContext<Lesson> {
                     + "join Lecturer l on l.lId=les.lId";
             PreparedStatement stm = connection.prepareStatement(sql);
             ResultSet rs = stm.executeQuery();
-            while (rs.next()) {
+            while (rs.next()){
                 Lesson les = new Lesson();
                 Group gr = new Group();
                 Lecturer le = new Lecturer();
@@ -67,7 +69,6 @@ public class LessonDBContext extends DBContext<Lesson> {
                 le.setlID(rs.getString("lId"));
                 les.setLecturer(le);
                 lessons.add(les);
-
             }
         } catch (SQLException ex) {
             Logger.getLogger(LessonDBContext.class.getName()).log(Level.SEVERE, null, ex);
@@ -80,11 +81,13 @@ public class LessonDBContext extends DBContext<Lesson> {
         int result = 0;
         try {
             connection.setAutoCommit(false);
+            //Delete lesson that you want to attend
             String sql_remove_atts = "DELETE Attendence WHERE leId=?";
             PreparedStatement stm_remove_atts = connection.prepareStatement(sql_remove_atts);
             stm_remove_atts.setString(1, leid);
             stm_remove_atts.executeUpdate();
-
+         
+            //Insert lesson that you want to attend
             String sql_insert_att = "INSERT INTO [dbo].[Attendence]\n"
                     + "           ([leId]\n"
                     + "           ,[sId]\n"
@@ -106,6 +109,7 @@ public class LessonDBContext extends DBContext<Lesson> {
                 result += stm_insert_att.executeUpdate();
             }
 
+            //Upadte the status of the slot that lecturer attended
             String sql_update_less = "UPDATE Lesson SET idAttend = 1 WHERE leId = ?";
             PreparedStatement stm_update_less = connection.prepareStatement(sql_update_less);
             stm_update_less.setString(1, leid);
@@ -124,11 +128,11 @@ public class LessonDBContext extends DBContext<Lesson> {
             } catch (SQLException ex) {
                 Logger.getLogger(LessonDBContext.class.getName()).log(Level.SEVERE, null, ex);
             }
-
         }
         return result;
     }
-
+    
+    //Take the lesson that you choose
     public ArrayList<Attendence> getAttendencesByLesson(String leid) {
         ArrayList<Attendence> atts = new ArrayList<>();
         try {
@@ -136,10 +140,10 @@ public class LessonDBContext extends DBContext<Lesson> {
                     + "s.sId, s.sName,\n"
                     + "a.aId,a.isPresent,a.aDescript,a.aDate\n"
                     + "FROM Student s join Enroll e on s.sId=e.sId\n"
-                    + "				join [Group] g on g.gId= e.gId\n"
-                    + "				join Lesson les on les.gId=g.gId\n"
-                    + "				left join Attendence a on a.leId=les.leId\n"
-                    + "				and a.sId=s.sId\n"
+                    + "join [Group] g on g.gId= e.gId\n"
+                    + "join Lesson les on les.gId=g.gId\n"
+                    + "left join Attendence a on a.leId=les.leId\n"
+                    + "and a.sId=s.sId\n"
                     + "WHERE les.leId=?";
 
             PreparedStatement stm = connection.prepareStatement(sql);
@@ -152,14 +156,11 @@ public class LessonDBContext extends DBContext<Lesson> {
                 s.setsID(rs.getString("sId"));
                 s.setsName(rs.getString("sName"));
                 att.setStudent(s);
-
                 les.setLeID(leid);
                 att.setLesson(les);
-
                 att.setaDescription(rs.getString("aDescript"));
                 att.setIsPresent(rs.getBoolean("isPresent"));
                 att.setaDate(rs.getTimestamp("aDate"));
-
                 atts.add(att);
             }
 
@@ -170,8 +171,11 @@ public class LessonDBContext extends DBContext<Lesson> {
         return atts;
 
     }
-//Timetable
 
+    
+    
+    
+//Timetable
     public ArrayList<Lesson> getLessonBy(String lid, Date from, Date to) {
         ArrayList<Lesson> arrLesson = new ArrayList<>();
         try {
@@ -233,6 +237,9 @@ public class LessonDBContext extends DBContext<Lesson> {
         return arrLesson;
     }
 
+    
+    
+    
     @Override
     public void insert(Lesson entity) {
         throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody

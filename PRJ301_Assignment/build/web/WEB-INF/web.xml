@@ -24,6 +24,22 @@
         <servlet-name>AssessmentGradeController</servlet-name>
         <servlet-class>controller.student.AssessmentGradeController</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>AttendStudent</servlet-name>
+        <servlet-class>controller.student.AttendStudentController</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>HomeStudentController</servlet-name>
+        <servlet-class>controller.student.HomeStudentController</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>ProfileController</servlet-name>
+        <servlet-class>controller.student.ProfileController</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>ProfileLecturerController</servlet-name>
+        <servlet-class>controller.lecturer.ProfileController</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>BaseRequire</servlet-name>
         <url-pattern>/baserequire</url-pattern>
@@ -47,5 +63,21 @@
     <servlet-mapping>
         <servlet-name>AssessmentGradeController</servlet-name>
         <url-pattern>/student/grade</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>AttendStudent</servlet-name>
+        <url-pattern>/student/attendstudent</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>HomeStudentController</servlet-name>
+        <url-pattern>/student/home</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ProfileController</servlet-name>
+        <url-pattern>/student/profile</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ProfileLecturerController</servlet-name>
+        <url-pattern>/lecturer/profile</url-pattern>
     </servlet-mapping>
 </web-app>
